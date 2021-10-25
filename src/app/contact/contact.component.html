@@ -1,13 +1,13 @@
 <div class="container" fxLayout="column" fxLayoutGap="10px">
 
-    <div fxFlex>
+    <div fxFlex [@expand]>
         <div>
             <h3>Contact Us</h3>
             <hr>
         </div>
     </div>
 
-    <div fxFlex>
+    <div fxFlex [@expand]>
         <h3>Location Information</h3>
         <div fxLayout="column" fxLayout.gt-sm="row">
             <div fxFlex="50" fxFlexOffset="20px">
@@ -34,11 +34,11 @@
         </div>
     </div>
 
-    <div fxFlex fxFlexOffset="20px" class="form-size">
+    <div fxFlex fxFlexOffset="20px" class="form-size" [@expand]>
         <h3>Send us your Feedback</h3>
-        <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
-
-        <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()">
+        <!-- <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p> -->
+        <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading"
+            [@expand]>
             <p>
                 <mat-form-field class="half-width">
                     <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
@@ -77,7 +77,42 @@
                     <textarea matInput formControlName="message" placeholder="Your Feedback" rows=12></textarea>
                 </mat-form-field>
             </p>
-            <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
+            <button [disabled]="feedbackForm.invalid" type="submit" mat-button
+                class="background-primary text-floral-white">Submit</button>
         </form>
+
+        <div *ngIf="isLoading && !isShowingResponse" [@expand]>
+            <h4>Submitting Form</h4>
+            <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngIf="isShowingResponse" [@expand]>
+
+            <h4>Your Submission</h4>
+
+            <mat-list-item>
+                <p matLine>
+                    First Name:<span> {{feedback.firstname}} </span>
+                </p>
+                <p matLine>
+                    Last Name:<span> {{feedback.lastname}} </span>
+                </p>
+                <p matLine>
+                    Tel. Number:<span> {{feedback.telnum}} </span>
+                </p>
+                <p matLine>
+                    Email:<span> {{feedback.email}} </span>
+                </p>
+                <p matLine>
+                    Contact You?:<span> {{feedback.agree}} </span>
+                </p>
+                <p matLine>
+                    How?:<span> {{feedback.contacttype}} </span>
+                </p>
+                <p matLine>
+                    Feedback:<span> {{feedback.message}} </span>
+                </p>
+            </mat-list-item>
+        </div>
     </div>
 </div>
